@@ -1,1 +1,1 @@
-# django-PreventiaTech-task
+# django-preventaTech-task
