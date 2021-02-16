@@ -44,6 +44,6 @@ urlpatterns = [
     path("api-docs/", schema_view.with_ui('swagger',
                                                cache_timeout=0), name='schema-swagger-ui'),
     # path('', include('core.urls'), name="core"),
-    # path('', include('users.urls'), name="users"),
+    path('', include('users.urls'), name="users"),
     path('', include('post.urls'), name="posts"),
 ]

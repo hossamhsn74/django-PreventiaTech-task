@@ -11,4 +11,5 @@ urlpatterns = [
     path('posts/<int:post_id>/comments/<int:pk>',
          CommentDetailView.as_view(), name='postComment'),
     # path('posts/<int:pk>/comments/add', CommentCreateView.as_view(), name='addComment'),
+    # path('posts/<int:pk>/like', CommentCreateView.as_view(), name='addComment'),
 ]

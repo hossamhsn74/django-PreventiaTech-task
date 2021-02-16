@@ -2,12 +2,10 @@ from django.db import models
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.utils.translation import ugettext_lazy as _
-from django.utils import timezone
-from datetime import datetime, timedelta
-import jwt
-from django.conf import settings
 from core.models import TimestampedModel
-# from app.post.models import Post
+from post.models import Post
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class CustomUserManager(BaseUserManager):
@@ -51,8 +49,6 @@ class CustomUser(AbstractUser, PermissionsMixin, TimestampedModel):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 
-    date_joined = models.DateTimeField(default=timezone.now)
-
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
 
@@ -64,43 +60,24 @@ class CustomUser(AbstractUser, PermissionsMixin, TimestampedModel):
     def get_full_name(self):
         return self.first_name + self.last_name
 
-    @property
-    def token(self):
-        """
-        Allows us to get a user's token by calling `user.token` instead of
-        `user.generate_jwt_token().
 
-        The `@property` decorator above makes this possible. `token` is called
-        a "dynamic property".
-        """
-        return self._generate_jwt_token()
-
-    def _generate_jwt_token(self):
-        """
-        Generates a JSON Web Token that stores this user's ID and has an expiry
-        date set to 60 days into the future.
-        """
-        dt = datetime.now() + timedelta(days=60)
-
-        token = jwt.encode({
-            'id': self.pk,
-            'exp': int(dt.strftime('%s'))
-        }, settings.SECRET_KEY, algorithm='HS256')
-
-        return token.decode('utf-8')
+@receiver(post_save, sender=CustomUser)
+def create_related_profile(sender, instance, created, *args, **kwargs):
+    if instance and created:
+        Profile.objects.create(user=instance)
 
 
 class Profile(TimestampedModel):
     user = models.OneToOneField(
-        'customUser', on_delete=models.CASCADE
+        'CustomUser', on_delete=models.CASCADE
     )
     bio = models.TextField(blank=True)
     image = models.URLField(blank=True)
-    follows = models.ManyToManyField(
-        'self',
-        related_name='followed_by',
-        symmetrical=False
-    )
+    # follows = models.ManyToManyField(
+    #     'self',
+    #     related_name='followed_by',
+    #     symmetrical=False
+    # )
 
     # likes = models.ManyToManyField(
     #     'Post',
@@ -110,21 +87,21 @@ class Profile(TimestampedModel):
     def __str__(self):
         return self.user.get_full_name()
 
-    def follow(self, profile):
-        """Follow `profile` if we're not already following `profile`."""
-        self.follows.add(profile)
+    # def follow(self, profile):
+    #     """Follow `profile` if we're not already following `profile`."""
+    #     self.follows.add(profile)
 
-    def unfollow(self, profile):
-        """Unfollow `profile` if we're already following `profile`."""
-        self.follows.remove(profile)
+    # def unfollow(self, profile):
+    #     """Unfollow `profile` if we're already following `profile`."""
+    #     self.follows.remove(profile)
 
-    def is_following(self, profile):
-        """Returns True if we're following `profile`; False otherwise."""
-        return self.follows.filter(pk=profile.pk).exists()
+    # def is_following(self, profile):
+    #     """Returns True if we're following `profile`; False otherwise."""
+    #     return self.follows.filter(pk=profile.pk).exists()
 
-    def is_followed_by(self, profile):
-        """Returns True if `profile` is following us; False otherwise."""
-        return self.followed_by.filter(pk=profile.pk).exists()
+    # def is_followed_by(self, profile):
+    #     """Returns True if `profile` is following us; False otherwise."""
+    #     return self.followed_by.filter(pk=profile.pk).exists()
 
     def like(self, post):
         """like `post` if we haven't already liked it."""

@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core.apps.CoreConfig',
-    # 'users.apps.UsersConfig',
+    'users.apps.UsersConfig',
     'post.apps.PostConfig',
     'rest_framework',
     'rest_framework.authtoken',
@@ -143,13 +143,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'users.CustomUser'
 # ACCOUNT_AUTHENTICATION_METHOD = 'email'
 # ACCOUNT_EMAIL_REQUIRED = True
 # ACCOUNT_UNIQUE_EMAIL = True
 # ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 # ACCOUNT_USERNAME_REQUIRED = False
-# SITE_ID = 1
+SITE_ID = 1
 
 
 # LOGIN_REDIRECT_URL = "/"

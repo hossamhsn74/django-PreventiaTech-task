@@ -1,10 +1,11 @@
 from django.db import models
 from core.models import TimestampedModel
-# from users.models import Profile
 
 
 class Post(TimestampedModel):
-    # author = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    # author = models.ForeignKey(
+    #     'users.Profile', on_delete=models.CASCADE, related_name='user_posts'
+    # )
     title = models.CharField(db_index=True, max_length=255)
     body = models.TextField()
     attachments = models.FileField(upload_to='files/', blank=True)
@@ -16,7 +17,9 @@ class Post(TimestampedModel):
 class Comment(TimestampedModel):
     post = models.ForeignKey(
         Post, on_delete=models.CASCADE, related_name='comments')
-    # author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_comments', blank=True)
+    # author = models.ForeignKey(
+    #     'users.Profile', on_delete=models.CASCADE, related_name='user_comments'
+    # )
     content = models.TextField(null=True, blank=True)
 
     class Meta:

@@ -1,9 +1,9 @@
 from django.urls import path, include
-from .views import UserSignUpView, UserLoginView, UserRetrieveUpdateAPIView
-
+from .views import CustomUserListView, UserSignUpView, UserLoginView, ProfileRetrieveAPIView
 
 urlpatterns = [
-    path("user/", UserRetrieveUpdateAPIView.as_view()),
-    path("users/", UserSignUpView.as_view()),
+    path("users/", CustomUserListView.as_view()),
+    path("users/signup", UserSignUpView.as_view()),
     path("users/login", UserLoginView.as_view()),
+    path("users/<int:pk>/profile", ProfileRetrieveAPIView.as_view()),
 ]
