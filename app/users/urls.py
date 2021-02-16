@@ -6,4 +6,6 @@ urlpatterns = [
     path("users/signup", UserSignUpView.as_view()),
     path("users/login", UserLoginView.as_view()),
     path("users/<int:pk>/profile", ProfileRetrieveAPIView.as_view()),
+    # path("users/<int:pk>/profile/posts", ProfilePostsRetrieveAPIView.as_view()),
+    # path("users/<int:pk>/deactivate", CustomUserChangeView.as_view()),
 ]

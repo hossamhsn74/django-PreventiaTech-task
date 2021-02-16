@@ -55,3 +55,30 @@ class ProfileRetrieveAPIView(generics.RetrieveAPIView):
         })
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ProfilePostsRetrieveAPIView(generics.RetrieveAPIView):
+    pass
+    # permission_classes = [permissions.AllowAny, ]
+    # # renderer_classes = (JSONRenderer,)
+    # serializer_class = ProfileSerializer
+    # queryset = Profile.objects.select_related('user')
+
+    # def retrieve(self, request, pk, *args, **kwargs):
+
+    #     try:
+    #         profile = self.queryset.get(user__pk=pk)
+    #     except Profile.DoesNotExist:
+    #         raise NotFound('A profile with this username does not exist.')
+
+    #     serializer = self.serializer_class(profile, context={
+    #         'request': request
+    #     })
+
+    #     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+class CustomUserChangeView(APIView):
+    # allow admin user to deactivate user account
+    pass
