@@ -7,8 +7,6 @@ RUN apk add zlib-dev jpeg-dev gcc musl-dev
 RUN apk add --update --no-cache postgresql-client
 RUN apk add --update --no-cache --virtual .tmp-build-deps \
     gcc libc-dev linux-headers postgresql-dev
-# RUN pip install django-rest-auth
-# RUN pip install django-allauth
 RUN pip install -r requirements.txt
 
 RUN mkdir /app

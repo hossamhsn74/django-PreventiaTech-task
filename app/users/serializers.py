@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 from .models import CustomUser, Profile
+from rest_framework import status
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -59,8 +60,7 @@ class LoginSerializer(serializers.Serializer):
             )
 
         return {
-            'first name': user.first_name,
-            'last name': user.last_name,
+            'status': status.HTTP_200_OK,
             'email': user.email,
         }
 
